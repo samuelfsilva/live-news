@@ -14,9 +14,9 @@ module.exports = {
     }),
     async index (request, response) {
         try {
-            const usuario = await Usuario.find();
+            const usuarios = await Usuario.find();
     
-            return response.send({ usuario });
+            return response.send({ usuarios });
         } catch (err) {
             return response.status(400).send({ error: 'Erro ao carregar lista de usuários' });
         }
