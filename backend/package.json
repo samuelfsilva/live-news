@@ -1,0 +1,34 @@
+{
+  "name": "live-news",
+  "version": "1.0.0",
+  "description": "API de plataforma guia de lives.",
+  "main": "index.js",
+  "repository": "https://github.com/samuelfsilva/live-news",
+  "author": "Samuel Ferreira",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/server.js",
+    "test": "cross-env NODE_ENV=test jest"
+  },
+  "keywords": [],
+  "dependencies": {
+    "aws-sdk": "^2.672.0",
+    "bcryptjs": "^2.4.3",
+    "celebrate": "^12.0.1",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
+    "crypto": "^1.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "knex": "^0.20.13",
+    "mongoose": "^5.9.9",
+    "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "jest": "^25.2.7",
+    "nodemon": "^2.0.2",
+    "supertest": "^4.0.2"
+  }
+}
