@@ -15,9 +15,8 @@ routes.get('/', function(request, response) {
 routes.get('/usuario', UsuarioController.index);
 
 routes.post('/usuario', UsuarioController.verificaCad, UsuarioController.create);
-
 /*
-    EVENTOS
+    EVENTO
 */
 routes.get('/evento', EventoController.index);
 
@@ -29,9 +28,15 @@ routes.post('/eventoFoto/:eventoId', EventoController.imageMulter, EventoControl
 
 routes.put('/evento/:eventoId', EventoController.verificaUpdate, EventoController.update);
 
+routes.delete('/evento/:eventoId', EventoController.verificaDel, EventoController.delete);
+/*
+    CATEGORIA
+*/
 routes.get('/categoria', CategoriaController.index);
 
 routes.post('/categoria', CategoriaController.verificaCad, CategoriaController.create);
+
+routes.delete('/categoria/:categoriaId', CategoriaController.verificaDelete, CategoriaController.delete);
 
 
 

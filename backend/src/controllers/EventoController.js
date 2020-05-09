@@ -9,10 +9,11 @@ const Foto = require('../models/Foto');
 module.exports = {
     verificaCad: celebrate({
         [Segments.HEADERS]: Joi.object({
-            userid: Joi.string().required(),
+            userid: Joi.string().required().length(24).regex(/^[0-9a-fA-F]+$/),
         }).unknown(),
         [Segments.BODY]: Joi.object().keys({
             nome: Joi.string().required(),
+            data: Joi.date().required(),
             descricao: Joi.string().required(),
             categoria: Joi.string().required(),
             ativo: Joi.boolean().required()
@@ -20,15 +21,24 @@ module.exports = {
     }),
     verificaUpdate: celebrate({
         [Segments.HEADERS]: Joi.object({
-            userid: Joi.string().required(),
+            userid: Joi.string().required().length(24).regex(/^[0-9a-fA-F]+$/),
         }).unknown(),
         [Segments.BODY]: Joi.object().keys({
             nome: Joi.string().required(),
+            data: Joi.date().required(),
             descricao: Joi.string().required(),
             categoria: Joi.string().required()
         })
     }),
     verificaFind: celebrate({
+        [Segments.PARAMS]: Joi.object().keys({
+            eventoId: Joi.string().required().length(24).regex(/^[0-9a-fA-F]+$/),
+        })
+    }),
+    verificaDel: celebrate({
+        [Segments.HEADERS]: Joi.object({
+            userid: Joi.string().required().length(24).regex(/^[0-9a-fA-F]+$/),
+        }).unknown(),
         [Segments.PARAMS]: Joi.object().keys({
             eventoId: Joi.string().required().length(24).regex(/^[0-9a-fA-F]+$/),
         })
@@ -58,10 +68,11 @@ module.exports = {
     async create(request, response) {
         try {
             const userId = request.headers.userid;
-            const { nome, descricao, categoria } = request.body;
+            const { nome, data, descricao, categoria } = request.body;
             
             const evento = await Evento.create({ 
                 nome, 
+                data,
                 descricao,
                 usuario: userId,
                 categoria
@@ -79,13 +90,14 @@ module.exports = {
             const userId = request.headers.userid;
             const eventoId = request.params.eventoId;
 
-            const { nome, descricao, valor, categoria } = request.body;
+            const { nome, data, descricao, categoria } = request.body;
 
             const eventoSearch = Evento.find({ _id: eventoId, usuario: userId });
 
             if (eventoSearch) {
                 const evento = await Evento.findByIdAndUpdate(eventoId, { 
-                    nome, 
+                    nome,
+                    data, 
                     descricao,
                     categoria
                 });
@@ -113,5 +125,25 @@ module.exports = {
         });
 
         return response.json(foto);
+    },
+    async delete(request, response) {
+        try {
+            const userId = request.headers.userid;
+            const eventoId = request.params.eventoId;
+
+            const eventoSearch = Evento.find({ _id: eventoId, usuario: userId });
+
+            if (eventoSearch) {
+                const evento = await Evento.findByIdAndDelete(eventoId);
+
+                await evento.save();
+        
+                return response.status(200);
+            } else {
+                return response.status(400).send({ error: 'Nenhum evento foi encontrado para este usuário' });
+            }
+        } catch (err) {
+            return response.status(400).send({ error: 'Erro ao exluir o evento' });
+        }
     },
 }

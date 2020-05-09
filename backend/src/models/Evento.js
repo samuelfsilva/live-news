@@ -26,6 +26,10 @@ const ItemSchema = new mongoose.Schema({
     motivoExclusao: {
         type: String,
     },
+    data: {
+        type: Date,
+        required: true,
+    },
     createdAt: {
         type: Date,
         default: Date.now,
